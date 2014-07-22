@@ -1,0 +1,139 @@
+
+/*TODO: Jump for learning;*/
+/*Gets rid of any gaps on edges*/
+body {
+	margin: 0 0 0 0;
+	padding: 0 0 0 0;
+/*	background-color: #C0C0C0 ;
+*/
+	background-color: gray;
+
+}
+
+html {
+	margin: 0;
+	width: 100%;
+	min-height: 100%;
+	height: 100%;
+}
+
+
+p {
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	 color: black;
+}
+
+h2 {
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-size: 3em;
+	color:black;
+}
+
+h3 {
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-size: 1.6em;
+	color:black;
+}
+
+h4 {
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-size: 1.2em;
+	color:black;
+	clear:both;
+}
+
+pre {
+	background-color: #F0F8FF;
+}
+
+#bayes {
+	float:left;
+}
+
+#nb_roc {
+	float:right;
+}
+.ROC {
+	float:right;
+}
+.section {
+	background-color: white;
+	border-radius: 6px;
+	margin-left: 20px;
+	margin-right: 20px;
+	padding-top: 2px;
+	padding-left: 40px;
+	padding-right: 40px;
+	padding-bottom: 10px;
+}
+#header_wrapper {
+	position: fixed;
+	top: 0px;
+	width: 100%;
+	height: 60px;
+/*	background-color: #B00000;
+*/	background-color: blue;
+
+}
+
+#overview {
+	margin-top: 50px;
+}
+
+
+.jumps {
+	width: 100%;
+	height: 70px;
+}
+/*Navigation bar*/
+
+
+#logo {
+	height: 30px;
+	width: 100px;
+	float: left;
+	margin-left: 20px;
+	color: white;
+	margin-top: 12px;
+
+}
+
+ul#top_nav li {
+	height: 30px;
+	padding-left: 20px;
+	padding-right:20px;
+	text-align: center;
+	float: left;
+	display:inline-block;
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-size: 1.1em;
+} 
+
+ul#top_nav li a{
+	height: 30px;
+	width: 180px;
+	display:block;
+	text-decoration: none;
+}
+
+
+ul#top_nav li a:link {
+	color: white;
+}
+
+
+ul#top_nav li a:visited {
+	color:white;
+}
+ul#top_nav li a:hover {
+	color: white;
+	font-size: 1.1em;
+}
+
+
+ul#top_nav li a:active {
+	color:#585858;
+}
+
+
+

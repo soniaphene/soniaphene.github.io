@@ -1,0 +1,166 @@
+<html>
+
+<head>
+    <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assignment 4: Visualization</title>
+</head>
+
+<style>
+
+text.mono {
+        font-size: 9pt;
+        font-family: Consolas, courier;
+}
+
+.counties {
+  fill: none;
+}
+
+.states {
+  fill: none;
+  stroke: #fff;
+  stroke-linejoin: round;
+}
+
+.q0-9 { fill:rgb(247,251,255); }
+.q1-9 { fill:rgb(222,235,247); }
+.q2-9 { fill:rgb(198,219,239); }
+.q3-9 { fill:rgb(158,202,225); }
+.q4-9 { fill:rgb(107,174,214); }
+.q5-9 { fill:rgb(66,146,198); }
+.q6-9 { fill:rgb(33,113,181); }
+.q7-9 { fill:rgb(8,81,156); }
+.q8-9 { fill:rgb(8,48,107); }
+
+</style>
+
+<body>
+
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            <div class="page-header center">
+                <h1>Part 2: <small>Geomapping Tweet Sentiment</small></h1>
+            </div>
+
+            
+              
+            <h2> Finding sentiments of counties</h2>
+			<p> In this part, I found the average sentiment of counties in the US. I again used over 350,000 US tweets in English collected from the Twitter Stream API from Jan 28, 2014 to Feb 25, 2014 to make my calculations. I extracted the latitude and longitude from the JSON objects in this file as well as a text. I used a logistic regression classifier to determine the probability that a tweet was positive (by first training the classifier on an input set and then passing in the text of my test tweet). I output these probabilities to a csv file which had the latitude, longitude, and probability of being positive for each tweet in the set. 
+			</p>
+      <p> Using this data, I then used the Data Science Toolkit api to determine the county from latitude and longitude. I was then able to find the average sentiment by adding up all the tweets from the same county and dividing by the number of tweets from that county. I visualized this data in the map below</p>
+      <h2> Sentiment Visualization</h2>
+      <div id="gMap"> </div>
+      <p> The map above shows how positive on average tweets were from a certain place. The most happy counties are the darkest and the least happy are the lightest. For those counties that had no data (or fewer than five tweets), the color is extremely light. Hover over a county (which had data) to find the name of the county. I found that the spread of my data was mainly between .3 and .7 chance of being positive. </p>
+			
+
+        <div class="col-md-2"></div>
+    </div>
+
+    <script src="http://d3js.org/d3.v3.min.js"></script>
+    <script src="http://d3js.org/queue.v1.min.js"></script>
+    <script src="http://d3js.org/topojson.v1.min.js"></script>
+    <script>
+
+    //TODO: make all the counties with missing data one color!
+    var width = 960,
+        height = 750;
+
+    var rateById = d3.map();
+
+    var rateByName=d3.map(); //keeps track of the names
+
+    var quantize = d3.scale.quantize()
+        .domain([0, .65])
+        .range(d3.range(9).map(function(i) { return "q" + i + "-9"; }));
+
+    var projection = d3.geo.albersUsa() //getsthe map
+        .scale(1280)
+        .translate([width / 2, height / 2]);
+
+    var path = d3.geo.path()
+        .projection(projection);
+
+    var svg = d3.select("#gMap").append("svg")
+        .attr("width", width)
+        .attr("height", height);
+
+    queue()
+        .defer(d3.json, "data/us.json")
+        .defer(d3.tsv, "output.tsv", function(d) { rateById.set(d.id, +d.sent); rateByName.set(d.id, d.name);})
+        .await(ready);
+
+    function ready(error, us) {
+      svg.append("g")
+          .attr("class", "counties")
+        .selectAll("path")
+          .data(topojson.feature(us, us.objects.counties).features)
+        .enter()
+          .append("path")
+            .attr("class", function(d) { return quantize(rateById.get(d.id)); })
+            .attr("d", path)
+          .append("title") //adds the hovering effect
+            .text(function(d){ return rateByName.get(d.id); });
+        
+      svg.append("path")
+          .datum(topojson.mesh(us, us.objects.states, function(a, b) { return a !== b; }))
+          .attr("class", "states")
+          .attr("d", path);
+     
+    }
+
+
+    list=[0,1,2,3,4,5,6,7,8] //have 9 different categories
+  
+
+    //adds the legend
+    gridSize = Math.floor(width / 24);
+    legendElementWidth = gridSize*2;
+    var legend = svg.selectAll(".legend")
+        .data([0,1,2,3,4,5,6,7,8])
+              .enter().append("g")
+              .attr("class", "legend");
+
+          legend.append("rect")
+            .attr("x", function(d, i) { return legendElementWidth * i+50; })
+            .attr("y", height-50)
+            .attr("width", legendElementWidth)
+            .attr("height", gridSize / 2)
+            .style("fill", function(d, i) {  //set fill according to which bucket
+              switch(i){
+                case 0:
+                 return "rgb(247,251,255)"; 
+                case 1:
+                 return "rgb(222,235,247)"; 
+                case 2: 
+                 return "rgb(198,219,239)"; 
+                case 3:
+                 return 'rgb(158,202,225)'; 
+                case 4:
+                 return 'rgb(107,174,214)'; 
+                case 5:
+                 return 'rgb(66,146,198)'; 
+                case 6:
+                 return 'rgb(33,113,181)'; 
+                case 7:
+                 return 'rgb(8,81,156)'; 
+                case 8:
+                 return 'rgb(8,48,107)'; 
+              }
+             });
+          legend.append("text")
+            .attr("class", "mono")
+            .text(function(d,i) {  
+              if (i==0){ return "no data";} //set labels for certain elements
+              if (i==1) { return "least happy";}
+              if (i==8) {return "most happy";}
+             })
+            .attr("x", function(d, i) { return legendElementWidth * i+50; })
+            .attr("y", height-10);
+    d3.select(self.frameElement).style("height", height + "px");
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html> 
+<html>
+	<head>
+		<title>Sonia Phene's Personal Page</title>
+		<link rel="stylesheet" href="style.css" type="text/css" />
+	</head>
+	<body>
+		<header>
+		<div id="header_wrapper">
+			<h1 id="logo">SONIA PHENE</h1>
+			<ul id="top_nav">
+				<li id="nav_home"><a href="homepage.html">Home</a></li>
+				<li id="nav_projects"><a href="projects.html">Projects</a></li>
+				<li id="nav_external"><a href ="externalprojects.html">Project Links</a></li>
+				<li class="current" id="nav_bio"><a href="bio.html">Bio</a></li>
+				<li id="nav_contact"><a href="contact.html">Contact</a></li>
+			</ul>
+		</div>
+	</header>
+		<div id="page-content">
+			<div id="right-panel-float">
+				<img id="bio_pic" src="images/bio_pic.jpg"/>
+			</div>
+			<div id="main-content">
+				<div id="bio_text">
+					<h2>About Me</h2>
+					<p> I'm studying Computer Science-Applied Math at Brown University. </p>
+					<h3> Education </h3>
+					<p> I am currently studying at Brown University in Providence, Rhode Island. I will graduate with a Bachelor of Science in Computer Science-Applied Math in 2015. </p>
+					<p> I graduated as Valedictorian from Washington-Lee in 2011. I also attended Rowland Hall-St. Marks school in Salt Lake City, Utah from 2007-2008.</p>
+					<h3> Growing Up</h3>
+					<p> I moved around a lot growing up, and I've lived in 16 different places! I spent most of my childhood in Texas, was in Utah for a while, and have been based out of Washington, D.C. for the past five years. I'm currently studying (and surviving the cold New England winters) in Providence, RI. </p>
+					<h3> Other Fun Stuff</h3>
+					<p> I enjoy coding, robotics, zumba, dancing and writing. I also love reading a good book, so I'd love to hear if you have any suggestions.</p>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>

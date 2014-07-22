@@ -1,0 +1,185 @@
+<html>
+<head>
+<title>CS 143 Project</title>
+<link href='http://fonts.googleapis.com/css?family=Nunito:300|Crimson+Text|Droid+Sans+Mono' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" title="Default" href="styles/github.css">
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>  
+
+<link rel="stylesheet" href="highlighting/styles/default.css">
+<script src="highlighting/highlight.pack.js"></script>
+
+<style type="text/css">
+body {
+	margin: 0px;
+	width: 100%;
+	font-family: 'Crimson Text', serif;
+	font-size: 20px;
+	background: #fcfcfc;
+}
+h1 {
+	font-family: 'Nunito', sans-serif;
+	font-weight: normal;
+	font-size: 28px;
+	margin: 25px 0px 0px 0px;
+	text-transform: lowercase;
+
+}
+
+h2 {
+	font-family: 'Nunito', sans-serif;
+	font-weight: normal;
+	font-size: 32px;
+	margin: 15px 0px 35px 0px;
+	color: #333;	
+	word-spacing: 3px;
+}
+
+h3 {
+	font-family: 'Nunito', sans-serif;
+	font-weight: normal;
+	font-size: 26px;
+	margin: 10px 0px 10px 0px;
+	color: #333;
+	word-spacing: 2px;
+}
+h4 {
+	font-family: 'Nunito', sans-serif;
+	font-weight: normal;
+	font-size: 22px;
+	margin: 10px 0px 10px 0px;
+	color: #333;
+	word-spacing: 2px;
+}
+
+h5 {
+	font-family: 'Nunito', sans-serif;
+	font-weight: normal;
+	font-size: 18px;
+	margin: 10px 0px 10px 0px;
+	color: #111;
+	word-spacing: 2px;
+}
+
+p, li {
+	color: #444;
+}
+
+a {
+	color: #DE3737;
+}
+
+.container {
+	margin: 0px auto 0px auto;
+	width: 960px;
+}
+
+#header {
+	background: #333;
+	width: 100%;
+}
+
+#headersub {
+	color: #ccc;
+	width: 960px;
+	margin: 0px auto 0px auto;
+	padding: 20px 0px 20px 0px;
+}
+
+.chart {
+	width: 480px;
+}
+.lol {
+	font-size: 16px;
+	color: #888;
+	font-style: italic;
+}
+.sep {
+	height: 1px;
+	width: 100%;
+	background: #999;
+	margin: 20px 0px 20px 0px;
+}
+.footer{
+	font-size: 16px;
+}
+.latex {
+	width: 100%;
+}
+
+.latex img {
+	display: block;
+	margin: 0px auto 0px auto;
+}
+
+pre {
+	font-family: 'Droid Sans Mono';
+	font-size: 14px;
+}
+
+td img {
+  vertical-align: middle;
+}
+
+#contents a {
+}
+</style>
+<script type="text/javascript">
+    hljs.initHighlightingOnLoad();
+</script>
+</head>
+<body>
+<div id="header" >
+<div id="headersub">
+<h1>Sonia Phene <span style="color: #DE3737">(sphene)</span></h1>
+</div>
+</div>
+<div class="container">
+
+<h2>CS 143 / Project 2 / Local Feature Matching</h2>
+
+
+<p> This project implements feature detection and matching, a fundamental part of many computer vision applications. Here, I used instance-level matching, which involves matching features from multiple views of the same scene. The three main parts of feature matching involve detecting interest points, describing them, and finally matching them. The Harris Corner detector was used to find interest points and a modified version of the SIFT pipeline was used to describe and match two features from different images. </p>
+
+<img src="eval2.jpg"  />
+<p style="font-size: 14px">This image shows 70 matches found by my feature matching algorithm. The ones outlined in green are correct matches. These images exhibit an 84% accuracy rate</p>
+
+<div style="clear:both">
+	
+<h3>Step 1) Interest Point Detection</h3>
+<div style="float: right; padding: 20px">
+<img src="scatter.jpg" width="90%"/>
+<p style="font-size: 14px">1500 interest points of the Notre Dame image shown in a scatter plot</p>
+</div>
+<p> The first part of feature matching is finding good points to track, which is important in ultimately determining correspondences. I used a version of the Harris Corner detector which takes local maxima as interest points. These are found by looking at rotationally invariant scalar measures, derived from the auto-correlation matrix. The auto-correlation matrix is found by comparing parts of an image with itself to determine how stable it is. The auto-correlation matrix at each point is found by looking at the image gradients in the x and y directions. The gaussian of the image gradient in the x direction squared is in the upper left coordinate, the gaussian of the image gradient in the y direction squared is in the lower right coordinate, and the gaussian of the product of the two is on the diagonal. Instead of using direct eigenvalue analysis, I took the det(A)-.03*trace(A)^2 as my strength measure for each pixel. This method downweights edge-like features where there is a large difference in the eigenvalues. After calculating this value for each pixel, I used the colfilt function to find local maxima. I also thresholded the interest points that I detected.</p>
+
+<h3>Step 2) Feature Description</h3>
+
+<p> After calculating interest points, I used a SIFT-like descriptor to create a 128-dimensional vector to describe each point. This descriptor was based fundamentally on the image gradient orientation. I calculated the image gradients in the x and y directions. Using this as my x and y components, I calculated the magnitude and angle. I then wrote my own function, sort_bins.m, to create a histogram based on the orientation. I sorted based on the angle and then added the magnitude of the gradient to the appropriate bin. I had 8 orientation bins in total (0 to 45 degrees, 45 to 90 degrees, and so on). I had 16 total cells for which I created these histograms, and then I appended them together. The histograms closest to the interest pixel were given greater weight. Each of my cells consisted of a 4x4 grid of pixels. I normalized this 128-dim vector, raised each element to the .5 power, and then normalized again to improve accuracy. SIFT is often regarded as a very accurate descriptor. Mikolajcyz and Schmid (2005) found that SIFT performed second best only to GLOH, Gradient location-orientation histogram, which uses log-polar bins instead of square bins.</p>
+
+<h3>Step 3) Matching</h3>
+<div style="float: left; padding: 20px">
+<img src="vishouse2.jpg" />
+<p style="font-size: 14px">An example of matching features from two different images of a house. Colors indicate the matches across both images </p>
+<p> The final step involves matching features. I used the nearest neighbor distance ratio test. This test involves comparing each feature from one image with every feature in another image. The top two closest matches are found and their ratio is computed. Small ratios mean that the feature is a good match with the closest feature while large ratios imply that both matches are close to the original input and therefore not necessarily a good match. I used a ratio of .545 to threshold my matches. I used knnsearch to speed up the computation of my functions and looked at the euclidean distance between features. </p>
+
+
+<h3>Optimizations and Results</h3>
+
+<p> In order to find the best matches, I tried changing several parameters. In my interest point detector function, I changed the value of alpha, used in computations with the auto-correlation matrix. I found that using alpha=.2 was the best value. On the Notre Dame images, increasing alpha from .2 to .6 decreased the accuracy by 23%. I also changed the value at which I thresholded the image. For the Notre Dame images, I was able to find that the values of my non-maximal suppression should be thresholded at .00003. For the other images, I sorted by strength of the confidences and then took the first 2000-5000 interest points. </p>
+
+<p>In writing my feature descriptor function, there were also several changes that I implemented. I tried changing the size of each cell to 3x3 pixels rather than 4x4. Interestingly, I found that this worked better when evaluating very few matches (around 10-30 matches), which I controlled by decreasing the number of interest points fed in. However, for a larger pool of matches, using a 3x3 decreased my accuracy by 13%. I also found that weighting the cells closest to the interest pixel greatly improved the accuracy. When I weighted the four center cells by 1.4 (compared to the border 12 which had a weight of 1), I jumped from 53% accuracy to 79% accuracy. I found that 1.4% was the weight that worked best, as increasing the weight from that point, decreased the accuracy. Finally, I found that raising each element to the .5 power increase my accuracy by a few percentage points, which depended on the exact number of matches.</p>
+
+<p> Overall, my images exhibit an 84% accuracy rate. There is a tradeoff between accuracy and the number of matches: if I decrease the number of matches (either directly or by decreasing the number of interest points I take), I can get up to 95% accuracy. My feature matching pipeline also works for other images, shown below, with varying levels of accuracy. Since my detector is not rotationally or scale invariant, these types of changes tend to have the biggest impact on the accuracy of the matches. However, for images at the same scale and orientation, my baseline feature matching algorithm works well. </p>
+
+<h3>Additional Image Matches</h3>
+<p> For the images below, only a handful of matches are shown because-unlike the Notre Dame images-no accuracy evaluation was performed, so it is easier to notice actual matches with a fewer number. Instead, colors indicate matches across pictures.</p>
+<img src="viscopper2.jpg" />
+<p style="font-size: 14px">Matching performed on two different views of Kennecot Copper Mine</p>
+<img src="viscap2.jpg" />
+<p style="font-size: 14px">Only five matches shown on the US Capitol to easily demonstrate features</p>
+<img src="visgaudi2.jpg" />
+<p style="font-size: 14px">Matching performed on the Capricho Gaudi, which is less accurate since my feature detector does not handle rotation and scale</p>
+<img src="vispantheon2.jpg" />
+<p style="font-size: 14px">Matching performed on the Pantheon</p>
+</body>
+</html>

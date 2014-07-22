@@ -1,0 +1,156 @@
+<html>
+
+<head>
+    <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assignment 2: Twitter Sentiment Analysis using Heuristics</title>
+    <style type="text/css">
+        .header {
+            background-color: #555;
+            color: #ddd;
+        }
+        .header .lead {
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+      
+    </style>
+</head>
+
+<body>
+    <div class="header row">
+        <div class="col-md-2"></div>
+        <div class="col-md-10 lead">
+            Sonia Phene (sphene)
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            <div class="page-header center">
+                <h1>Assignment 2 <small>Twitter Sentiment Analysis using Heuristics</small></h1>
+            </div>
+            <h2>Introduction</h2>
+			<p>
+            In this assignment, I used the Twitter API in Python to conduct an analysis of tweets. I collected over 40,000 tweet objects from ten minutes of streaming. A tweet object consisted of many data fields including the tweet text, the user, and the time of the tweet. I used a Twitter Developer account and OAuth authorization to fetch these tweets. I then parsed this data and conducted analyses based on the words in the tweet, the username, and the location.
+            </p>
+            <h2>Searching tweets</h2>
+            <p> To begin with, I used the Twitter API to search through texts for a certain term. I chose the term "dance" and was able to retrieve tweets with this term by sending a GET request to the Twitter server and passing in the parameter of the term, dance. Below are a few examples of what this returned. </p>
+            <pre><code>"Happiness is not the absence of challenges. It's learning to dance through them." 
+"Practising a dance routine at playtime and feeling like you were going to be in the next Girls Aloud" 
+"When I had the chance  Take you to every party  Cause all you wanted to do was dance  Now my baby is dancing" 
+"TELEPHONE.@RockaBam:Stop calling stop calling,I don't wanna think anymore.I left my head and my heart on the dance floor... </code> </pre>
+            <h2> Most frequent words</h2>
+            <p> I analyzed my collection of tweets to find the most frequent words. I counted the number of times a word occurred and divided it by the total number of words I was analyzing. I excluded a list of "stop words" such as "I", "the", and "who" from this analysis. I only analyzed English tweets (which I could determine by accessing the language field of the tweet object that I retrieved). In order to parse my tweet texts, I stripped all punctuation and converted each word to lower case. I decided on this so that "mountain" and "mountain." would not be considered separate words. In the analyses described below, I employed a similar parsing strategy. I found that stripping punctuation entirely worked better than converting punctuation to space, which led to awkward left-overs such as "nt" from contractions. Below, I've reported the 30 most frequent words and their frequency. Unsurprisingly, "rt," short for retweet, was at the top of the list. </p>
+            <pre><code>rt 0.0466066526208
+im 0.00898933793015
+like 0.00647385558322
+love 0.00625678350252
+dont 0.00569494988189
+get 0.00489050628871
+follow 0.00430313477622
+one 0.0040732937496
+&amp; 0.00376683904744
+good 0.00357530485858
+know 0.00352422907489
+go 0.00337100172381
+u 0.00337100172381
+want 0.00335823277788
+people 0.00319223648088
+lol 0.00302624018387
+cant 0.00284747494094
+got 0.00279639915725
+day 0.00274532337356
+back 0.00273255442763
+new 0.00269424758986
+really 0.00268147864394
+time 0.0026048649684
+need 0.0023877928877
+youre 0.00232394815808
+see 0.00228564132031
+please 0.00224733448254
+think 0.00223456553661
+today 0.002170720807
+tonight 0.0021196450233 </code></pre>
+            <h2> Happiest and saddest tweets</h2>
+            <p> I also conducted a sentiment analysis on the tweets using the AFINN-111 standard, which assigns a sentiment value to a large dictionary of words. Any words not in this dictionary were given a score of zero. I ranked my tweets from happiest to saddest (again by parsing the text from the tweet object and only using English tweets with words stripped of punctuation and converted to lower case). Below the score along with the tweet for my ten most highest and lowest sentiment scores are ranked. </p>
+            <p> The top ten most positive tweets </p>
+            <pre></code>72.0: RT bizzlestwin I love love love love love love love love love love love love love love love love love love love love love love love love …
+25.0: SrBachchan Good morning dear sirji Hope ur wrk started b4 hrs Best luck hve like lovely healthy n creative day to u lots of love
+20.0: "RT gianttacozz Soompi Awards
+
+SNSD won
+Best Stage Outfit
+
+SHINee won
+Best Music Video
+Artist of The Year
+
+EXO won
+Top Male Group
+Song of …"
+18.0: RT lijboogie Love is loyalty and loyalty is love but you can keep the love bc Id rather have loyalty ✊💯
+16.0: I love that sign BulletBusters Kari Im such a fan and this is amazing woo woo
+15.0: RT suicideIife  be happy
+ oh thanks for your help all of my problems are solved and i am so happy wow thanks a whole lot
+14.0: TFaulkz hahaha well its my best chance to win a national championship We came in 3rd place last year so its worth the drive
+13.0: RT msleamichele Thank you all so much for all your support and love Im so happy you all love YOUREMINEThat song is my heart❤️
+LOU…
+13.0: RealLiamPayne Wonderful my love you hold me tight strong on you I love you Follow me please  9
+13.0: RT GirIFacts Im not popular but I have nice friends Im not rich but I have what I need I may not be liked but I know Im loved
+            </code> </pre>
+            <p> The top ten most negative tweets </p>
+            <pre><code>-13.0: Bitch think she usin my shit to watch movies Hell nah
+-14.0: BrennaWWE RealPaigeWWE Too bad your slut ass wont get the chance of a rats ass to be one
+-14.0: Lmaooo Just friends self dey suck dick “Echecrates She not your girlfriend if she dont suck your dick Bruh”
+-14.0: Dirty van bitches wanna suck my dick off
+-14.0: fuck man i can never stay mad at your dumb ass
+-14.0: camilacabello97 RyanFoundation Glue a fucking knife to your huge dick and fuck my asshole like theres no tomorrow
+-14.0: RT crook3dyouth “chaseloffy fuck that httptcoI9CYFNHKdW” fuck that I know its fake but just to be safe You creepy as fuck
+-15.0: Racist guys friend didnt like it when I called his racist friend a racist fuck and told him to eat shit on FB
+-16.0: WHO THE FUCK DO YOU THINK YOU ARE FLIRTING WITH THE PERSON I LIKE YOU AND YOUR FUCKING HEART EYE EMOJIS CAN FUCKING LEAVE BITCH BYE
+-23.0: "RT Iaughing look at the time wow
+
+     ugly ugly ugly
+  ugly               ugly
+ ugly              ugly
+  ugly               ugly
+     …" </code> </pre>
+            <h2> Breaking Bad actors</h2>
+            <p> For my analyis of Breaking Bad actors, I sent a GET request to Twitter sending in the parameter of the actor's Twitter username and specified that I wanted their latest 100 tweets (some have fewer than 100). I then stored this information in a csv file and parsed it to get information for their sentiments. Using the method described for sentiment analysis, I found the average sentiment of a tweet for each actor. Below, I have reported their average sentiment score and the username. </p>
+            <pre><code>1.91: aaronpaul_8
+1.85: quiethandfilms
+1.69696969697: Krystenritter
+1.66: RjMitte
+1.65: abqjoker
+1.34: mrbobodenkirk
+1.24: BryanCranston
+1.12121212121: CharlesEbaker
+0.98: betsy_brandt
+0.92: DanielMoncada80
+0.42: LuisMoncada77
+0.4: mattjonesisdead
+0.14: deanjnorris
+-0.8: ActorRayCruz
+</code></pre>
+            <h2> Happiest and Saddest States</h2>
+            <p> I analyzed each of the states to find which were the "happiest" and the "saddest." The same analyis of sentiments was used. In order to retrieve the state abbreviation, I used the place data structure in the tweet object. I first checked that the country was the US, and then I parsed the full name of the place by splitting on the comma and taking the second element. The full name is reported in the form  "city, abbreviation" such as "Dallas, TX." I then found the average tweet sentiment for each state. Since most tweets don't have a location associated with them, I was only able to retrieve information on 41 of the states from the ten minutes of data that I had collected. Below I've reported the happiest and saddest states with their sentiment scores. </p>
+            <p> Happiest States* </p>
+<pre><code>7.0: SC (South Carolina)
+3.71428571429: KS (Kansas)
+3.0: NV (Nevada)
+3.0: DC (Washington, DC)
+2.0: AK (Alaska)</pre></code>
+<p> *Note: if I don't include the District of Columbia as a state, Florida ranks just below Alaska with a score of 1.55 </p>
+            <p> Saddest States </p>
+            <pre><code>-1.5: AR (Arkansas)
+-1.5: AL (Alabama)
+-1.5: WV (West Virginia)
+-2.0: MS (Mississippi)
+-2.5: ND (North Dakota)</pre> </code>
+        <div class="col-md-2"></div>
+    </div>
+
+</body>
+</html>

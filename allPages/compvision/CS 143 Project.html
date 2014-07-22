@@ -1,0 +1,217 @@
+
+<!-- saved from url=(0055)http://cs.brown.edu/courses/cs143/results/proj4/sphene/ -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>CS 143 Project</title>
+<link href="./CS 143 Project_files/css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" title="Default" href="http://cs.brown.edu/courses/cs143/results/proj4/sphene/styles/github.css">
+<script src="./CS 143 Project_files/jquery.min.js"></script>  
+
+<link rel="stylesheet" href="http://cs.brown.edu/courses/cs143/results/proj4/sphene/highlighting/styles/default.css">
+<script src="./CS 143 Project_files/highlight.pack.js"></script>
+
+<style type="text/css">
+body {
+	margin: 0px;
+	width: 100%;
+	font-family: 'Crimson Text', serif;
+	font-size: 20px;
+	background: #fcfcfc;
+}
+h1 {
+	font-family: 'Nunito', sans-serif;
+	font-weight: normal;
+	font-size: 28px;
+	margin: 25px 0px 0px 0px;
+	text-transform: lowercase;
+
+}
+
+h2 {
+	font-family: 'Nunito', sans-serif;
+	font-weight: normal;
+	font-size: 32px;
+	margin: 15px 0px 35px 0px;
+	color: #333;	
+	word-spacing: 3px;
+}
+
+h3 {
+	font-family: 'Nunito', sans-serif;
+	font-weight: normal;
+	font-size: 26px;
+	margin: 10px 0px 10px 0px;
+	color: #333;
+	word-spacing: 2px;
+}
+h4 {
+	font-family: 'Nunito', sans-serif;
+	font-weight: normal;
+	font-size: 22px;
+	margin: 10px 0px 10px 0px;
+	color: #333;
+	word-spacing: 2px;
+}
+
+h5 {
+	font-family: 'Nunito', sans-serif;
+	font-weight: normal;
+	font-size: 18px;
+	margin: 10px 0px 10px 0px;
+	color: #111;
+	word-spacing: 2px;
+}
+
+p, li {
+	color: #444;
+}
+
+a {
+	color: #DE3737;
+}
+
+.container {
+	margin: 0px auto 0px auto;
+	width: 1160px;
+}
+
+#header {
+	background: #333;
+	width: 100%;
+}
+
+#headersub {
+	color: #ccc;
+	width: 960px;
+	margin: 0px auto 0px auto;
+	padding: 20px 0px 20px 0px;
+}
+
+.chart {
+	width: 480px;
+}
+.lol {
+	font-size: 16px;
+	color: #888;
+	font-style: italic;
+}
+.sep {
+	height: 1px;
+	width: 100%;
+	background: #999;
+	margin: 20px 0px 20px 0px;
+}
+.footer{
+	font-size: 16px;
+}
+.latex {
+	width: 100%;
+}
+
+.latex img {
+	display: block;
+	margin: 0px auto 0px auto;
+}
+
+pre {
+	font-family: 'Droid Sans Mono';
+	font-size: 14px;
+}
+
+table td {
+  text-align: center;
+  vertical-align: middle;
+}
+
+table td img {
+  text-align: center;
+  vertical-align: middle;
+}
+
+#contents a {
+}
+</style>
+<script type="text/javascript">
+    hljs.initHighlightingOnLoad();
+</script>
+</head>
+<body>
+<div id="header">
+<div id="headersub">
+<h1>Sonia Phene <span style="color: #DE3737">(sphene)</span></h1>
+</div>
+</div>
+<div class="container">
+
+<h2>CS 143 / Project 4 / Face Detection with a Sliding Window</h2>
+
+<img src="./CS 143 Project_files/cards.png">
+<p style="font-size: 14px"> An example image on which my face detector ran.</p>
+</div>
+
+<p> This project implements a face detection pipeline. Face detection is one of the most common applications of computer vision. If you try and snap a picture from a smartphone, you'll often get suggestions for face outlines. Photo editing applications, like photoshop, will find faces for its users. In this project, I implement a sliding window face detector to create my own face detector. My detector overall works very well with an average precision of 90.8%.</p>
+
+<p> A sliding window face detector is straightforward to understand: a trained classifier looks at every image patch and determines whether or not there is a face in that window. In order for this to be effective, the image must be resized in order to detect faces at different scales. My implementation is modeled on the Dalal-Triggs paper of 2005, which focuses on representing faces through the SIFT-like Histogram of Gradients.
+</p>
+
+
+<h3>Retrieving features</h3>
+
+<p>The first step in training the classifier is to get positive and negative examples. In order to train my classifier with positive examples, I used a database of faces from the Caltech Face database that were cropped to 36x36 pixels. I retrieved the HOG descriptor for each image. In order to obtain negative examples, I had a database of non-face scenes which include scenes from Wu et al. and the SUN scene database. I randomly chose squares of size 36x36 and then extracted the HOG descriptor for that pixel patch.</p>
+
+
+<h3> Training the classifier </h3>
+<div style="float: right; padding: 10px">
+<img src="./CS 143 Project_files/hog_face.png" width="85%">
+<p style="font-size: 14px"> A representation of a face in the HOG feature space</p>
+</div>
+<p> Once I had a collection of 6,713 positive training examples and over 13,000 negative training examples (which I increased in the attempt of decreasing my false positive rate), I had to train my classifier to recognize face and non-face examples. I used a linear SVM (support vector machine)classifier to train the classifier. This classifier was labeled with binary labels for face or non-face examples. </p>
+<p>As a result of training the classifier, I then had a representation of a face in the HOG feature space. This is a model for a face and this is what the sliding window compares image patches to. Using this model, I was able to compute confidences on each patch of the image. </p>
+
+<h3> Detecting images </h3>
+<p> I then ran my detector on input images from the CMU + MIT database of 130 images, which contained 511 faces including both human and non-human faces. For each image, I try to detect faces at six different scales: original, .9 times the image, .7, .5, .3, and .1. I convert each resized image to a HOG feature space and then performed a sliding window comparison stepping through each pixel. I evaluated the confidence of having a face at each window based on the output from my linear SVM classifier. I kept track of the information regarding the bounding boxes and confidences for every box that was above a certain threshold. Because many boxes overlap and some faces are detected at different scales, I perform non-maximum suppression on all my potential faces. </p>
+
+<h3> Optimizations </h3>
+<p> There are several key components to my face detector pipeline. The major design choices that I made were to decrease my hog_cell_size to 3 from 6, which works with a finer HOG template. This improved my accuracy by 5%. I also decided to step through every single pixel in my HOG feature space to make sure that I was able to detect all faces at any given point. Finally, my multi-scale detector in images works at six different scales. Compared to my single scale implementation, my multiscale detector performs 10% better. </p>
+
+<h3> Performance and Results</h3>
+<div style="float: left; padding: 5px">
+<img src="./CS 143 Project_files/average_precision2.png" width="85%">
+<p style="font-size: 14px">A graph of my precision recall.</p>
+</div>
+<p> I have an average precision rate of 90.8%, detecting a vast majority of all faces in input images. This is higher than the 89.5% accuracy achieved by the Viola-Jones 2001 algorithm. There was a direct relationship between the precision and the number of false positives detected. I was able to get my program to run at 91.5% accuracy, but each image had dozens of bounding boxes making it impractical. Conversely, I was also able to reduce the number of false positives in each image to only one or two but at the expense of several percentage points of accuracy. In the end, I compromised with a face detector that achieves around 90.8% accuracy and has a handful of false positives. </p> 
+
+<h3> Actual Image Results</h3>
+
+<img src="./CS 143 Project_files/great_group_faces.png">
+<p style="font-size: 14px">My detector works well with detecting all the faces in a group.</p>
+<img src="./CS 143 Project_files/three_excellent.png">
+<p style="font-size: 14px">My detector seems to work the best with images where faces are the dominant part of the picture</p>
+<img src="./CS 143 Project_files/perfect_one.png">
+<p style="font-size: 14px">Even when a picture is distorted, my detector will find it.</p>
+<img src="./CS 143 Project_files/group_pics.png">
+<p style="font-size: 14px">An example of detecting faces at different scales.</p>
+<img src="./CS 143 Project_files/backtothefuture.png">
+<p style="font-size: 14px">My detector tends to find nearly all faces in an image.</p>
+<img src="./CS 143 Project_files/children2.png">
+<p style="font-size: 14px">Face detection even works on smaller images.</p>
+<img src="./CS 143 Project_files/cards.png">
+<p style="font-size: 14px">My detector even finds non-human faces.</p>
+<img src="./CS 143 Project_files/playing.png">
+<p style="font-size: 14px">My detector even works on playing card faces</p>
+<img src="./CS 143 Project_files/excellentdifferent.png">
+<p style="font-size: 14px">Since the detector is feature based, it finds many different kinds of faces-even sketches.</p>
+<img src="./CS 143 Project_files/judy_bats.png">
+<p style="font-size: 14px">Another example of finding faces at many different scales.</p>
+<img src="./CS 143 Project_files/startrekvoyager.png">
+<p style="font-size: 14px">Faces-alien and human-from a sci-fi show I used to watch.</p>
+<img src="./CS 143 Project_files/friends.png">
+<p style="font-size: 14px">Even faces closed to each other are detected individually.</p>
+<img src="./CS 143 Project_files/addams.png">
+<p style="font-size: 14px">Different types of faces are detected as well.</p>
+<img src="./CS 143 Project_files/aerosmith.png">
+<p style="font-size: 14px">Even faces closed to each other are detected individually.</p>
+<img src="./CS 143 Project_files/albert.png">
+<p style="font-size: 14px">My best performance occurs when a face dominates the screen.</p>
+
+
+</body></html>

@@ -1,0 +1,283 @@
+<html>
+<head>
+<title>CS 143 Project</title>
+<link href='http://fonts.googleapis.com/css?family=Nunito:300|Crimson+Text|Droid+Sans+Mono' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" title="Default" href="styles/github.css">
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>  
+
+<link rel="stylesheet" href="highlighting/styles/default.css">
+<script src="highlighting/highlight.pack.js"></script>
+
+<style type="text/css">
+body {
+	margin: 0px;
+	width: 100%;
+	font-family: 'Crimson Text', serif;
+	font-size: 20px;
+	background: #fcfcfc;
+}
+h1 {
+	font-family: 'Nunito', sans-serif;
+	font-weight: normal;
+	font-size: 28px;
+	margin: 25px 0px 0px 0px;
+	text-transform: lowercase;
+
+}
+
+h2 {
+	font-family: 'Nunito', sans-serif;
+	font-weight: normal;
+	font-size: 32px;
+	margin: 15px 0px 35px 0px;
+	color: #333;	
+	word-spacing: 3px;
+}
+
+h3 {
+	font-family: 'Nunito', sans-serif;
+	font-weight: normal;
+	font-size: 26px;
+	margin: 10px 0px 10px 0px;
+	color: #333;
+	word-spacing: 2px;
+}
+h4 {
+	font-family: 'Nunito', sans-serif;
+	font-weight: normal;
+	font-size: 22px;
+	margin: 10px 0px 10px 0px;
+	color: #333;
+	word-spacing: 2px;
+}
+
+h5 {
+	font-family: 'Nunito', sans-serif;
+	font-weight: normal;
+	font-size: 18px;
+	margin: 10px 0px 10px 0px;
+	color: #111;
+	word-spacing: 2px;
+}
+
+p, li {
+	color: #444;
+}
+
+a {
+	color: #DE3737;
+}
+
+.container {
+	margin: 0px auto 0px auto;
+	width: 960px;
+}
+
+#header {
+	background: #333;
+	width: 100%;
+}
+
+#headersub {
+	color: #ccc;
+	width: 960px;
+	margin: 0px auto 0px auto;
+	padding: 20px 0px 20px 0px;
+}
+
+.chart {
+	width: 480px;
+}
+.lol {
+	font-size: 16px;
+	color: #888;
+	font-style: italic;
+}
+.sep {
+	height: 1px;
+	width: 100%;
+	background: #999;
+	margin: 20px 0px 20px 0px;
+}
+.footer{
+	font-size: 16px;
+}
+.latex {
+	width: 100%;
+}
+
+.latex img {
+	display: block;
+	margin: 0px auto 0px auto;
+}
+
+pre {
+	font-family: 'Droid Sans Mono';
+	font-size: 14px;
+}
+
+td img {
+  vertical-align: middle;
+}
+
+#contents a {
+}
+</style>
+<script type="text/javascript">
+    hljs.initHighlightingOnLoad();
+</script>
+</head>
+<body>
+<div id="header" >
+<div id="headersub">
+<h1>Sonia Phene <span style="color: #DE3737">(sphene)</span></h1>
+</div>
+</div>
+<div class="container">
+
+<h2>CS 143 / Project 1 / Image Filtering and Hybrid Images</h2>
+
+<div style="float: right; padding: 20px">
+<img src="hybrid_image.jpg" />
+<p style="font-size: 14px">Example of a hybrid image</p>
+</div>
+
+<p> This project creates hybrid images as described in the 2006 SIGGRAPH paper by Oliva, Torralba, and Schyns. A hybrid image is the combination of two different images, formed by summing the low-pass filtered version of one image with the high-pass filtered version of another. Hybrid images have the special property of appearing differently at different viewing distances. At close distances, the high frequency parts of an image can more readily be seen but at further distances the low frequency image stands out. In looking at the hybrid images on this page, the image to which the high frequency was applied dominates in the larger sizes while the interpretation changes to the low frequency image at smaller sizes.  </p>
+
+
+
+<div style="clear:both">
+<h3>Gaussian and Laplacian Images</h3>
+
+<div style="float: left; padding: 20px">
+<img src="low_frequencies_allein.jpg"  />
+<p style="font-size: 14px">Low frequency image of Einstein</p>
+</div>
+
+<div style="float: right; padding: 20px">
+<img src="high_frequencies_allein.jpg" />
+<p style="font-size: 14px">High frequency image of Einstein</p>
+</div>
+<p> 	To obtain a hybrid image, filtered versions from a high-frequency and low-frequency filter must first be created. The images on the left and right show what an image looks like when a frequency filter has been applied. Applying the Gaussian filter to an image removes the high frequency component. The Gaussian function is smoothing, which blurs an image.</p>
+
+	<p>The Laplacian filter removes the low frequency components of an image. This filter can be obtained by subtracting the Gaussian filtered image from the original image. Intuitively, this makes sense because subtracting the low frequency pass of an image from the original should leave the high frequency pass.</p>
+
+<div style="clear:both">
+<h2>Method to code these images</h2>
+<p> In order to make my code run as fast as possible, I utilized the fact that matlab matrix functions run quickly to avoid looping through each pixel. Essentially, I got the neighborhood around each pixel in the form of a column. This gave me a matrix in which each column represented the neighborhood centered around a pixel in the image. I then turned my filter into a column too and used repmat to repeat this column to give me a matrix the same size as the neighborhood one. Then I used element by element multiplication on these two matrices to apply the filter. Finally, I summed along each column in order to get the final return value obtained by applying the filter and reshaped the matrix to match that of the original image.  </p>
+
+
+
+<h3>Results by scale</h3>
+
+<p> The table below shows what hybrid image is created from two images. The first image in the table is the one to which the low frequency filter is applied. This image is more prominently "seen" in the smaller images. The second image is the one to which the high frequency filter is applied. This image is more prominently seen in the larger images. The scale of images on the right show the hybrid image created.</p>
+
+<table border=.5>
+<tr>
+<td>
+	
+<img src="dog.bmp" width="24%"/>
+<img src="cat.bmp"  width="24%"/>
+<img src="hybrid_image_scales.jpg" width="48%"/>
+
+</td>
+</tr>
+
+<tr>
+<td>
+<img src="plane.bmp" width="24%"/>
+<img src="bird.bmp"  width="24%"/>
+<img src="hybrid_image_scales_bird.jpg" width="48%"/>
+
+</td>
+</tr>
+
+<tr>
+<td>
+<img src="marilyn.bmp" width="24%"/>
+<img src="einstein.bmp"  width="24%"/>
+<img src="hybrid_image_scales_ein.jpg" width="48%"/>
+
+</td>
+</tr>
+
+<tr>
+<td>
+<img src="motorcycle.bmp" width="24%"/>
+<img src="bicycle.bmp"  width="24%"/>
+<img src="hybrid_image_scales_bike.jpg" width="48%"/>
+
+</td>
+</tr>
+
+<tr>
+<td>
+<img src="fish.bmp" width="24%"/>
+<img src="submarine.bmp"  width="24%"/>
+<img src="hybrid_image_scales_fish.jpg" width="48%"/>
+
+</td>
+</tr>
+</table>
+
+<h4>Results from creation</h4>
+<div style="clear:both" >
+<p> The table below shows how the hybrid images were constructed. The first image is the hybrid. The second is the high frequency image and the third is the low frequency image. </p>
+</div>
+
+
+
+<table border=1>
+<tr>
+<td>
+	
+<img src="hybrid_image.jpg" width="33%"/>
+<img src="high_frequencies.jpg"  width="33%"/>
+<img src="low_frequencies.jpg" width="33%"/>
+
+</td>
+</tr>
+
+<tr>
+<td>
+	
+<img src="hybrid_image_bird.jpg" width="33%"/>
+<img src="high_frequencies_bird.jpg"  width="33%"/>
+<img src="low_frequencies_bird.jpg" width="33%"/>
+
+</td>
+</tr>
+<tr>
+<td>
+	
+<img src="hybrid_image_ein.jpg" width="33%"/>
+<img src="high_frequencies_ein.jpg"  width="33%"/>
+<img src="low_frequencies_ein.jpg" width="33%"/>
+
+</td>
+</tr>
+<tr>
+<td>
+	
+<img src="hybrid_image_bike.jpg" width="33%"/>
+<img src="high_frequencies_bike.jpg"  width="33%"/>
+<img src="low_frequencies_bike.jpg" width="33%"/>
+
+</td>
+</tr>
+
+<tr>
+<td>
+	
+<img src="hybrid_image_fish.jpg" width="33%"/>
+<img src="high_frequencies_fish.jpg"  width="33%"/>
+<img src="low_frequencies_fish.jpg" width="33%"/>
+
+</td>
+</tr>
+<table>
+
+
+
+</body>
+</html>
