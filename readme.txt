@@ -1,4 +1,8 @@
 
+NOTE: On Oct 4, 2024 I created an archive for myself. 
+
+I last updated these over 10 years ago on Aug 2014. 
+
 ==================================================================================================
 
 CEEVEE is a clean, modern, fully responsive site template for your
