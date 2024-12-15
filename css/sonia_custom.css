@@ -1,0 +1,77 @@
+/* Override Bootstrap's primary color */
+.text-primary {
+    color: #6a0dad !important; /* Purple text */
+}
+
+.bg-primary {
+    background-color: #6a0dad !important; /* Purple background */
+}
+
+/* Optional: Ensure buttons use purple */
+.btn-primary {
+    background-color: #6a0dad !important;
+    border-color: #6a0dad !important;
+}
+
+.btn-primary:hover {
+    background-color: #4c0080 !important; /* Darker purple on hover */
+    border-color: #4c0080 !important;
+}
+
+/* Global link styles */
+a {
+    color: #6a0dad; /* Purple links */
+    text-decoration: none; /* Remove underlines for cleaner look */
+}
+
+a:hover {
+    color: #4c0080; /* Darker purple on hover */
+    text-decoration: underline; /* Optional hover effect */
+}
+
+/* Header styling */
+h1 span.text-primary {
+    font-weight: bold; /* Ensure bold for emphasis */
+    font-size: inherit; /* Matches surrounding text size */
+}
+
+/* Publications section styling */
+.resume-section-content ul {
+    list-style-type: none; /* Remove bullets */
+    padding: 0; /* Remove default padding */
+}
+
+.resume-section-content li {
+    margin-bottom: 1.5rem; /* Spacing between publications */
+    line-height: 1.6; /* Improve readability */
+}
+
+.resume-section-content ul li strong {
+    font-weight: bold;
+    font-size: 1.1rem; /* Slightly larger for emphasis */
+    color: #000; /* High contrast for titles */
+}
+
+/* Your name in publications */
+.resume-section-content ul li strong.sonia-name {
+    font-weight: bold;
+    font-size: 1.1rem; /* Matches paper titles */
+    color: #6a0dad; /* Purple for consistency */
+}
+
+/* Journal styling */
+.resume-section-content em {
+    font-style: italic; /* Italicize journal names */
+    color: #555; /* Subtle gray tone for journals */
+}
+
+/* Link to publications */
+.paper-link {
+    color: #6a0dad; /* Purple icon */
+    margin-left: 8px; /* Space between title and icon */
+    font-size: 1rem; /* Smaller icon size */
+}
+
+.paper-link:hover {
+    color: #4c0080; /* Darker purple on hover */
+}
