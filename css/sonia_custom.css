@@ -7,7 +7,7 @@
     background-color: #6a0dad !important; /* Purple background */
 }
 
-/* Optional: Ensure buttons use purple */
+/* Button styles for primary buttons */
 .btn-primary {
     background-color: #6a0dad !important;
     border-color: #6a0dad !important;
@@ -21,7 +21,7 @@
 /* Global link styles */
 a {
     color: #6a0dad; /* Purple links */
-    text-decoration: none; /* Remove underlines for cleaner look */
+    text-decoration: none; /* Remove underlines for a cleaner look */
 }
 
 a:hover {
@@ -46,30 +46,39 @@ h1 span.text-primary {
     line-height: 1.6; /* Improve readability */
 }
 
-.resume-section-content ul li strong {
-    font-weight: bold;
-    font-size: 1.1rem; /* Slightly larger for emphasis */
-    color: #000; /* High contrast for titles */
+.publication-list {
+    list-style: none; /* Remove bullets */
+    padding: 0;
 }
 
-/* Your name in publications */
-.resume-section-content ul li strong.sonia-name {
+.publication-list li {
+    margin-bottom: 1.5rem; /* Consistent spacing for items */
+    line-height: 1.6; /* Improve readability */
+}
+
+.publication-title {
     font-weight: bold;
-    font-size: 1.1rem; /* Matches paper titles */
+    font-size: 1.1rem; /* Slightly larger font size for emphasis */
+    color: #333; /* Dark gray for high contrast */
+}
+
+.author-name {
+    font-weight: bold; /* Emphasize your name */
     color: #6a0dad; /* Purple for consistency */
 }
 
 /* Journal styling */
-.resume-section-content em {
+.resume-section-content em,
+.publication-list em {
     font-style: italic; /* Italicize journal names */
-    color: #555; /* Subtle gray tone for journals */
+    color: #555; /* Subtle gray for differentiation */
 }
 
 /* Link to publications */
 .paper-link {
-    color: #6a0dad; /* Purple icon */
-    margin-left: 8px; /* Space between title and icon */
-    font-size: 1rem; /* Smaller icon size */
+    color: #6a0dad; /* Purple link */
+    margin-left: 8px; /* Space between title and link icon */
+    font-size: 1rem; /* Smaller icon size for balance */
 }
 
 .paper-link:hover {
@@ -78,54 +87,17 @@ h1 span.text-primary {
 
 /* Google Scholar Profile link */
 .profile-link {
-    font-size: 1.2rem;
-    margin-bottom: 1.5rem;
-    text-align: center;
+    font-size: 1.2rem; /* Slightly larger font size for visibility */
+    margin-bottom: 1.5rem; /* Spacing below */
+    text-align: center; /* Center the profile link */
 }
 
 .profile-link a {
-    color: #6a0dad; /* Purple */
-    font-weight: bold;
-    text-decoration: none;
+    color: #6a0dad; /* Purple link */
+    font-weight: bold; /* Bold for emphasis */
+    text-decoration: none; /* Clean look without underline */
 }
 
 .profile-link a:hover {
-    text-decoration: underline;
-}
-
-/* Publications styling */
-.publication-list {
-    list-style: none; /* Remove bullets */
-    padding: 0;
-}
-
-.publication-list li {
-    margin-bottom: 1.5rem;
-    line-height: 1.6;
-}
-
-.publication-title {
-    font-weight: bold;
-    font-size: 1.1rem; /* Slightly larger */
-    color: #333; /* Dark gray for contrast */
-}
-
-.author-name {
-    font-weight: bold; /* Ensures your name and 'Core Contributors' are bold */
-    color: #6a0dad; /* Purple for consistency */
-}
-
-.paper-link {
-    color: #6a0dad; /* Purple link */
-    margin-left: 8px; /* Space between title and link icon */
-    font-size: 1rem; /* Smaller link icon */
-}
-
-.paper-link:hover {
-    color: #4c0080; /* Darker purple on hover */
-}
-
-.publication-list em {
-    font-style: italic;
-    color: #555; /* Subtle gray for journals */
+    text-decoration: underline; /* Add underline on hover */
 }
