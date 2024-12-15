@@ -75,3 +75,57 @@ h1 span.text-primary {
 .paper-link:hover {
     color: #4c0080; /* Darker purple on hover */
 }
+
+/* Google Scholar Profile link */
+.profile-link {
+    font-size: 1.2rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.profile-link a {
+    color: #6a0dad; /* Purple */
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.profile-link a:hover {
+    text-decoration: underline;
+}
+
+/* Publications styling */
+.publication-list {
+    list-style: none; /* Remove bullets */
+    padding: 0;
+}
+
+.publication-list li {
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+}
+
+.publication-title {
+    font-weight: bold;
+    font-size: 1.1rem; /* Slightly larger */
+    color: #333; /* Dark gray for contrast */
+}
+
+.author-name {
+    font-weight: bold; /* Ensures your name and 'Core Contributors' are bold */
+    color: #6a0dad; /* Purple for consistency */
+}
+
+.paper-link {
+    color: #6a0dad; /* Purple link */
+    margin-left: 8px; /* Space between title and link icon */
+    font-size: 1rem; /* Smaller link icon */
+}
+
+.paper-link:hover {
+    color: #4c0080; /* Darker purple on hover */
+}
+
+.publication-list em {
+    font-style: italic;
+    color: #555; /* Subtle gray for journals */
+}
